@@ -44,13 +44,14 @@ class Robot:
                 if index in self._values:
                     assert(self._values[index].changedCount+1 == changedCount)
                 self._values[index] = Robot.Values.Value(value, changedCount)
-                self._robot.notify(self._eventType, changedCount)
+                self._robot.notify(self._eventType)
 
     def __init__(self, hostIpAddress: str, tcpPort: int):
         self._jsonRpcTcpClient = JsonRpcTcpClient(hostIpAddress, tcpPort)
         self._event = threading.Event()
-        self._lastNotifiedEventType = dict()
-        self._lastNotifiedEventTypeMutex = threading.Lock()
+        self._toNotifiedEventTypes = set()
+        self._toNotifiedEventTypesMutex = threading.Lock()
+        self._notifiedEventTypes = None
         # Values binding
         self._irsDistance = Robot.Values(self, Robot.EventType.IR_DISTANCE)
         self._jsonRpcTcpClient.bindNotification("irProximityDistanceDetected",
@@ -101,13 +102,30 @@ class Robot:
     def getUltrasoundsDistance(self, index: int) -> int:
         return self._ultrasoundsDistance.getValue(index)
 
-    def waitChanged(self, eventType: EventType|set[EventType], timeout: float|None=None) -> EventType|None:
-        return self._waitChangedHelper(self._waitParamHelper(eventType), timeout)
+    def waitChanged(self, eventTypes: EventType|set[EventType], timeout: float|None=None) -> EventType|None:
+        # For eventTypes to be a set
+        if isinstance(eventTypes, Robot.EventType):
+            eventTypes = {eventTypes}
+        # Save event type set
+        with self._toNotifiedEventTypesMutex:
+            assert(len(self._toNotifiedEventTypes)==0)
+            assert(self._notifiedEventTypes == None)
+            assert(not self._event.is_set())
+            self._toNotifiedEventTypes = eventTypes
+        # Wait event
+        self._event.wait(timeout)
+        with self._toNotifiedEventTypesMutex:
+            self._toNotifiedEventTypes.clear()
+            toReturn = self._notifiedEventTypes
+            self._notifiedEventTypes = None
+            self._event.clear()
+            return toReturn
 
-    def notify(self, eventType: EventType, changedCount: int):
-        with self._lastNotifiedEventTypeMutex:
-            self._lastNotifiedEventType[eventType] = changedCount
-        self._event.set()
+    def notify(self, eventType: EventType):
+        with self._toNotifiedEventTypesMutex:
+            if eventType in self._toNotifiedEventTypes:
+                self._notifiedEventTypes = eventType
+                self._event.set()
 
     def close(self):
         self._jsonRpcTcpClient.close()
@@ -115,34 +133,3 @@ class Robot:
     def _setIsReadyHandle(self, params):
         assert(params == None)
         self._isReadySemaphore.release()
-
-    def _waitParamHelper(self, eventTypes: EventType|set[EventType]) -> dict[EventType, int]:
-        toReturn = dict()
-        with self._lastNotifiedEventTypeMutex:
-            if isinstance(eventTypes, Robot.EventType):
-                toReturn[eventTypes] = self._lastNotifiedEventType[eventTypes]
-            else:
-                for eventType in eventTypes:
-                    if eventType in self._lastNotifiedEventType:
-                        toReturn[eventType] = self._lastNotifiedEventType[eventType]
-        return toReturn
-
-    def _waitChangedHelper(self, eventTypes: dict[EventType, int], timeout: float|None) -> EventType|None:
-        startTime = time.time()
-        self._event.clear()
-        while True:
-            if timeout!=None:
-                remainingTime = timeout-(time.time()-startTime)
-                if (remainingTime<0):
-                    return None
-            else:
-                remainingTime = None
-            if not self._event.wait(remainingTime):
-                return None
-            self._event.clear()
-            with self._lastNotifiedEventTypeMutex:
-                for eventType, changedCountBegin in eventTypes.items():
-                    changedCountNew = self._lastNotifiedEventType.get(eventType)
-                    if ((changedCountBegin == None and changedCountNew != None)
-                        or (changedCountBegin != None and changedCountNew>changedCountBegin)):
-                        return eventType
