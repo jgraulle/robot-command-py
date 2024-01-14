@@ -7,10 +7,6 @@ from typing import Any
 
 
 class Robot:
-    class MotorIndex(enum.Enum):
-        RIGHT = enum.auto()
-        LEFT = enum.auto()
-
     class EventType(enum.Enum):
         IR_DISTANCE = enum.auto()
         LINE_TRACK_IS_DETECTED = enum.auto()
@@ -80,9 +76,6 @@ class Robot:
     def waitReady(self):
         self._isReadySemaphore.acquire()
         time.sleep(1.0)
-
-    def setMotorSpeed(self, motorIndex: MotorIndex, value: float):
-        self._jsonRpcTcpClient.callNotification("setMotorSpeed", {"motorIndex": motorIndex.name, "value": value})
 
     def setMotorsSpeed(self, rightValue: float, leftValue: float):
         self._jsonRpcTcpClient.callNotification("setMotorsSpeed", {"rightValue": rightValue, "leftValue": leftValue})
