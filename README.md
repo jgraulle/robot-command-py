@@ -25,7 +25,7 @@
 ## Description
 
 Dans le code que nous allons utiliser il y a une variable "robot" sur lequel on va utiliser la
-fonction "robot.setMotorsSpeed(rightValue, leftValue)" qui permet de modifier la vitesse des
+fonction "robot.setMotorsPower(rightValue, leftValue)" qui permet de modifier la vitesse des
 moteurs des roues du robot. Il y a 2 paramètres car le robot à 2 roues. Pour chacune des roues on
 peut avoir une valeur entre -1 et 1 dont :
 
@@ -39,9 +39,9 @@ peut avoir une valeur entre -1 et 1 dont :
 - Cliquer sur le menu "File" puis l'option "Open Folder", sélectionner "Home", puis "Workspace", puis "robot-command-py", puis cliquer sur "Open"
 - Ouvrir le fichier "main.py" (double clic sur le fichier "main.py" à gauche)
 - Chercher la ligne contenant "def step1_move3s(robot: Robot):"
-    - "robot.setMotorsSpeed(0.2, 0.2)" : veut donc dire avancer tout droit
+    - "robot.setMotorsPower(0.2, 0.2)" : veut donc dire avancer tout droit
     - "time.sleep(3.0)" : attendre 3 secondes
-    - "robot.setMotorsSpeed(0.0, 0.0)" : veut donc dire stopper les 2 roues du robot
+    - "robot.setMotorsPower(0.0, 0.0)" : veut donc dire stopper les 2 roues du robot
 - Lancer le programme : Cliquer sur le triangle blanc en haut à droite (en regardant le robot sur le simu)
 
 
@@ -83,9 +83,9 @@ Remarque : penser à commenter et décommenter les fonctions à la fin du progra
 - Remplacer "TODO step4" par le code suivant
 ```
     while True:
-        robot.setMotorsSpeed(0.2, 0.2)
+        robot.setMotorsPower(0.2, 0.2)
         time.sleep(2.0)
-        robot.setMotorsSpeed(-0.1, 0.1)
+        robot.setMotorsPower(-0.1, 0.1)
         time.sleep(0.5)
 ```
 

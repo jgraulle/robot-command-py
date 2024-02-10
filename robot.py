@@ -77,7 +77,7 @@ class Robot:
         self._isReadySemaphore.acquire()
         time.sleep(1.0)
 
-    def setMotorsSpeed(self, rightValue: float, leftValue: float):
+    def setMotorsPower(self, rightValue: float, leftValue: float):
         self._jsonRpcTcpClient.callNotification("setMotorsSpeed", {"rightValue": rightValue, "leftValue": leftValue})
 
     def getLineTracksIsDetected(self, index: int) -> bool:
