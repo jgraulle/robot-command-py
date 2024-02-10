@@ -11,7 +11,7 @@ class Robot:
         IR_DISTANCE = enum.auto()
         LINE_TRACK_IS_DETECTED = enum.auto()
         LINE_TRACK_VALUE = enum.auto()
-        WHEEL_STEP = enum.auto()
+        ENCODER_WHEEL = enum.auto()
         SWITCH = enum.auto()
         ULTRASOUNDS_DISTANCE = enum.auto()
 
@@ -58,7 +58,7 @@ class Robot:
         self._lineTracksValue = Robot.Values(self, Robot.EventType.LINE_TRACK_VALUE)
         self._jsonRpcTcpClient.bindNotification("lineTrackValue",
                 lambda params: self._lineTracksValue.receiveHandle(params))
-        self._wheelsStep = Robot.Values(self, Robot.EventType.WHEEL_STEP)
+        self._wheelsStep = Robot.Values(self, Robot.EventType.ENCODER_WHEEL)
         self._jsonRpcTcpClient.bindNotification("speedValue",
                 lambda params: self._wheelsStep.receiveHandle(params))
         self._switchs = Robot.Values(self, Robot.EventType.SWITCH)
