@@ -17,6 +17,8 @@ class Robot:
 
     RIGHT:int = 0
     LEFT:int = 1
+    RIGHT2:int = 2
+    LEFT2:int = 3
 
     class Values:
         Value = namedtuple('Value', ['value', 'changedCount'])
@@ -82,6 +84,9 @@ class Robot:
 
     def setMotorsPower(self, rightValue: float, leftValue: float):
         self._jsonRpcTcpClient.callNotification("setMotorsSpeed", {"rightValue": rightValue, "leftValue": leftValue})
+
+    def getIrDistanceValue(self, index: int) -> bool:
+        return self._irsDistance.getValue(index)
 
     def getLineTracksIsDetected(self, index: int) -> bool:
         return self._lineTracksIsDetected.getValue(index)
