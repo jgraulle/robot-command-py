@@ -15,6 +15,9 @@ class Robot:
         SWITCH = enum.auto()
         ULTRASOUNDS_DISTANCE = enum.auto()
 
+    RIGHT:int = 0
+    LEFT:int = 1
+
     class Values:
         Value = namedtuple('Value', ['value', 'changedCount'])
 
