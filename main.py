@@ -4,7 +4,7 @@ import time
 
 def step1_move3s(robot: Robot):
     robot.setMotorsPower(0.2, 0.2)
-    time.sleep(1.0)
+    time.sleep(3.0)
     robot.setMotorsPower(0.0, 0.0)
 
 
