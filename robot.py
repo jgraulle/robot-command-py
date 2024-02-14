@@ -64,7 +64,7 @@ class Robot:
         self._jsonRpcTcpClient.bindNotification("lineTrackValue",
                 lambda params: self._lineTracksValue.receiveHandle(params))
         self._wheelsStep = Robot.Values(self, Robot.EventType.ENCODER_WHEEL)
-        self._jsonRpcTcpClient.bindNotification("speedValue",
+        self._jsonRpcTcpClient.bindNotification("encoderWheelValue",
                 lambda params: self._wheelsStep.receiveHandle(params))
         self._switchs = Robot.Values(self, Robot.EventType.SWITCH)
         self._jsonRpcTcpClient.bindNotification("switchIsDetected",
