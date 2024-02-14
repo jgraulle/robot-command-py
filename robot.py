@@ -83,7 +83,7 @@ class Robot:
         time.sleep(1.0)
 
     def setMotorsPower(self, rightValue: float, leftValue: float):
-        self._jsonRpcTcpClient.callNotification("setMotorsSpeed", {"rightValue": rightValue, "leftValue": leftValue})
+        self._jsonRpcTcpClient.callNotification("setMotorsPower", {"rightValue": rightValue, "leftValue": leftValue})
 
     def getIrDistanceValue(self, index: int) -> bool:
         return self._irsDistance.getValue(index)
