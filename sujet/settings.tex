@@ -1,0 +1,61 @@
+% \usepackage[utf8]{inputenc}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{import}
+\usepackage{float} % for H option in figure
+\usepackage{enumitem}
+\usepackage{pifont}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue
+}
+\usepackage{tcolorbox}
+
+\definecolor{MainColor}{RGB}{0,82,82} % dark teal
+
+
+% -----------------------------------------------------------------------------
+% Font
+% see https://tug.org/FontCatalogue/firasans/
+% 'sfdefault' activates Fira Sans as the default text font
+% 'lining' increases numbers height
+\usepackage[sfdefault,lining,light]{FiraSans}
+\usepackage[T1]{fontenc}
+% \renewcommand*\oldstylenums[1]{{\firaoldstyle #1}} ???
+\usepackage{FiraMono} % only for monospaced texttt
+% \usepackage[ttscale=.875]{libertine}
+% \usepackage{time}
+%
+% fix default extreme Fira bold for each section, subsection...
+\usepackage{titlesec} % \titleformat
+\titleformat{\section}
+{\normalfont\fontseries{sb}\Large\color{MainColor}}
+{Étape~\thesection.}{1em}{}
+%
+\titleformat{\subsection}
+{\normalfont\fontseries{m}\large\color{MainColor}}
+{\thesubsection}{0.5em}{}
+%
+\titleformat{\subsubsection}
+{\normalfont\fontseries{m}\normalsize\color{MainColor}}
+{\thesubsubsection}{0.4em}{}
+%
+\titleformat{\paragraph}[runin]
+{\normalfont\fontseries{m}\normalsize\color{MainColor}}
+{\theparagraph}{}{}
+%
+\titleformat{\subparagraph}[runin]
+{\normalfont\fontseries{m}\normalsize\color{MainColor}}
+{\thesubparagraph}{}{}
+%
+
+\counterwithout{section}{chapter}
+\setcounter{section}{-1}
+
+\newcommand{\step}{\item[\textcolor{MainColor}{\ding{237}}]}
+\newcommand{\code}[1]{\texttt{"#1"}}
+\newcommand{\cmd}[1]{\texttt{#1}}
